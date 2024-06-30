@@ -43,7 +43,7 @@ const store = (req, res) => {
 
   const sql = "INSERT INTO catalogo (CodigoArticulo, Descripcion, Medida, Color, Madera, Categoria, imagen) VALUES (?, ?, ?, ?, ?, ?, ?)";
   db.query(sql, [CodigoArticulo, Descripcion, Medida, Color, Madera, Categoria, imageName], (error, result) => {
-    // console.log(result);
+    console.log(result);
     if (error){
       // console.log(error);
       return res.status(500).json({error: 'intente mas tarde'});
