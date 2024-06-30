@@ -1,16 +1,47 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 
+const userModel = require("../models/user.model");
+
 const register = (req, res) => {
   const { email, password } = req.body;
 
   const hash = bcrypt.hashSync(password, 8);
   console.log(hash);
 
-  res.json('OK')
+  const user = { id: Date.now(), email, password: hash};
+
+  userModel.push(user)
+
+  const token = jwt.sign({ id: user.id }, process.env.SECRET_KEY, {
+    expiresIn: "1h",
+  });
+
+  res.status(201).send({ auth: true, token});
+}
+
+const login = (req, res) => {
+  const { email, password } = req.body;
+
+  const user = userModel.find((u) => u.email === email); 
+  
+  if(!user) return res.status(404).send("User not found")
+
+  const passwordIsvalid = bcrypt.compareSync(password, user.password)
+
+  if (!passwordIsvalid) {
+    return res.status(401).send({ auth: false, token: null});
+  }
+
+  const token = jwt.sign({ id: user.id }, process.env.SECRET_KEY, {
+    expiresIn: "1h",
+  });
+
+  res.status(200).send({ auth: true, token });
 }
 
 
 module.exports = {
   register,
+  login,
 }
