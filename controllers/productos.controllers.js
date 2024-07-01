@@ -16,7 +16,7 @@ const index = (req, res) => {
 const show = (req, res) => {
   const {id} = req.params;
 
-  const sql = "SELECT * FROM catalogo WHERE CodigoArticulo = ?";
+  const sql = "SELECT * FROM catalogo WHERE Id = ?";
   db.query(sql, [id], (error, rows) => {
     // console.log(rows);
     if (error){
@@ -59,9 +59,9 @@ const update = (req, res) => {
   const {id} = req.params;
   const {CodigoArticulo, Descripcion, Medida, Color, Madera, Categoria} = req.body;
 
-  const sql = "UPDATE catalogo SET CodigoArticulo = ?, Descripcion = ?, Medida = ?, Color = ?, Madera = ?, Categoria = ? WHERE CodigoArticulo = ?"
+  const sql = "UPDATE catalogo SET CodigoArticulo = ?, Descripcion = ?, Medida = ?, Color = ?, Madera = ?, Categoria = ? WHERE Id = ?"
   db.query(sql, [CodigoArticulo, Descripcion, Medida, Color, Madera, Categoria, id], (error, result) => {
-    console.log(result);
+    console.log(error);
     if (error){
       return res.status(500).json({error: 'intente mas tarde'})
     }
@@ -78,7 +78,7 @@ const update = (req, res) => {
 const destroy = (req, res) => {
   const {id} = req.params;
 
-    let sql = "SELECT * FROM catalogo WHERE CodigoArticulo = ?";
+    let sql = "SELECT * FROM catalogo WHERE Id = ?";
     db.query(sql, [id], (error, rows) => {
       // console.log(rows);
       if (error){
@@ -93,7 +93,7 @@ const destroy = (req, res) => {
 
     });
 
-    sql = "DELETE FROM catalogo WHERE CodigoArticulo = ?";
+    sql = "DELETE FROM catalogo WHERE Id = ?";
     db.query(sql, [id], (error, result) => {
     // console.log(result);
     if (error){
